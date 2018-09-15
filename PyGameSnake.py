@@ -19,19 +19,24 @@ key = "none"
 # graphics
 FPS = 12
 FPSCLOCK = pygame.time.Clock()
-square_size = 16
+square_size = 32
 board_width = 16
-board_hight = 16
-xmargin = 5
-ymargin = 5
+board_height = 16
+xmargin = 32
+ymargin = 32
 margin_color = lightgray
 odd_color = white
 even_color = black
 
+# game
+score = 0
+
 
 def background_grid(mx, my, mcolor, bwidth, bhight, sqsize, odd, even):
-    pygame.draw.rect(DISPLAYSURF, mcolor, (0, 0), (board_width * square_size + xmargin * 2, my))
-
+    pygame.draw.rect(DISPLAYSURF, mcolor, (0, 0, bwidth * sqsize + my * 2, my))
+    pygame.draw.rect(DISPLAYSURF, mcolor, (0, my, mx, bhight * sqsize))
+    pygame.draw.rect(DISPLAYSURF, mcolor, (0, (bhight * sqsize + mx), bwidth * sqsize + my * 2, mx))
+    pygame.draw.rect(DISPLAYSURF, mxolor, )
 
 
 
@@ -48,6 +53,8 @@ def key_input(keyinput):
 
 DISPLAYSURF = pygame.display.set_mode((board_width * square_size + xmargin * 2, board_height * square_size + ymargin * 2))
 pygame.display.set_caption("Snake  - score: " + str(score))
+
+background_grid(xmargin, ymargin, margin_color, board_width, board_height, square_size, odd_color, even_color)
 
 while True:
     for event in pygame.event.get():
