@@ -5,7 +5,6 @@ from pygame.locals import *
 
 pygame.init()
 
-# testing atom
 # Colors
 white = (255, 255, 255)
 black = (000, 000, 000)
@@ -27,7 +26,7 @@ direction = (0, 0)
 last_direction = (0, 0)
 
 # graphics
-FPS = 6
+FPS = 8
 FPSCLOCK = pygame.time.Clock()
 square_size = 32
 board_width = 16
@@ -78,15 +77,18 @@ def draw_square(x, y, color):
 
 
 def random_apple():
+    retry = False
     while True:
         apple = (random.randrange(board_width), random.randrange(board_height))
         applex, appley = apple
         for s in snake_xy:
-            if s != apple:
+            if s == apple:
+                retry is True
                 break
         else:
-            continue
-        break
+            retry is False
+        if retry is False:
+            break
     pygame.draw.rect(DISPLAYSURF, apple_color, (xmargin + applex * square_size
                                                 + apple_margin, ymargin + appley * square_size
                                                 + apple_margin, square_size - 2 * apple_margin,
@@ -105,18 +107,19 @@ def key_input(keyinput):
     elif keyinput == keyleft and last_direction != (1, 0):
         print("LEFT")
         return (-1, 0)
-    elif keyinput == keyright and last_direction != (1, 0):
+    elif keyinput == keyright and last_direction != (-1, 0):
         print("RIGHT")
         return (1, 0)
     else:
         return last_direction
+        print("last direction")
 
 
 def snake():
     global dead, ate_apple, score, apple_xy, last_direction
     last_head_x, last_head_y = snake_xy[-1]
-    print(direction)
     last_direction = direction
+    print(last_direction)
     direction_x, direction_y = direction
     next_snake_xy = (last_head_x + direction_x, last_head_y + direction_y)
     if next_snake_xy[0] < 0 or next_snake_xy[0] > board_width - 1:
@@ -142,7 +145,6 @@ def snake():
 def render_snake():
     global ate_apple
     head_x, head_y = snake_xy[-1]
-    print(snake_xy[-1])
     pygame.draw.rect(DISPLAYSURF, snake_head_color, (xmargin + head_x *
                                                      square_size + snake_margin, ymargin + head_y * square_size
                                                      + snake_margin, square_size - 2 * snake_margin,
@@ -174,7 +176,8 @@ DISPLAYSURF = pygame.display.set_mode((board_width * square_size + xmargin * 2,
 update_score(score)
 background_grid()
 pygame.draw.rect(DISPLAYSURF, apple_color, (xmargin + apple_xy[0] * square_size
-                                            + apple_margin, ymargin + apple_xy[1] * square_size
+                                            + apple_margin, ymargin +
+                                            apple_xy[1] * square_size
                                             + apple_margin, square_size - 2 * apple_margin,
                                             square_size - 2 * apple_margin))
 while True:
