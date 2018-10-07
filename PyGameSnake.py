@@ -77,16 +77,14 @@ def draw_square(x, y, color):
 
 
 def random_apple():
-    retry = False
     while True:
         apple = (random.randrange(board_width), random.randrange(board_height))
         applex, appley = apple
+        retry = False
         for s in snake_xy:
             if s == apple:
-                retry is True
-                break
-        else:
-            retry is False
+                retry = True
+                print("retry")
         if retry is False:
             break
     pygame.draw.rect(DISPLAYSURF, apple_color, (xmargin + applex * square_size
@@ -99,27 +97,21 @@ def random_apple():
 def key_input(keyinput):
     global last_direction
     if keyinput == keyup and last_direction != (0, 1):
-        print("UP")
         return (0, -1)
     elif keyinput == keydown and last_direction != (0, -1):
-        print("DOWN")
         return (0, 1)
     elif keyinput == keyleft and last_direction != (1, 0):
-        print("LEFT")
         return (-1, 0)
     elif keyinput == keyright and last_direction != (-1, 0):
-        print("RIGHT")
         return (1, 0)
     else:
         return last_direction
-        print("last direction")
 
 
 def snake():
     global dead, ate_apple, score, apple_xy, last_direction
     last_head_x, last_head_y = snake_xy[-1]
     last_direction = direction
-    print(last_direction)
     direction_x, direction_y = direction
     next_snake_xy = (last_head_x + direction_x, last_head_y + direction_y)
     if next_snake_xy[0] < 0 or next_snake_xy[0] > board_width - 1:
@@ -134,11 +126,11 @@ def snake():
         dead = True
         print("2")
         return
-    elif next_snake_xy == apple_xy:
+    snake_xy.append(next_snake_xy)
+    if next_snake_xy == apple_xy:
         ate_apple = True
         score += 1
         apple_xy = random_apple()
-    snake_xy.append(next_snake_xy)
     render_snake()
 
 
